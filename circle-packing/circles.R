@@ -13,10 +13,11 @@ single_circle <- function (radius) {
   return(c(x = x,y = y,r = r))
 }
 
-generate_circles <- function(val, attempts) {
-  for (i in 1:attempts){
-      b <- ifelse(val < 7, runif(1), runif(1, min = 5, max = val))
-      new_circle <- single_circle(val)
+generate_circles <- function() {
+  for (i in 1:20000){
+      # b <- ifelse(val < 7, runif(1), runif(1, min = 5, max = val))
+      b <- runif(1, min = 0.1, max = 0.5)
+      new_circle <- single_circle(runif(1, min = 1, max = 24))
       
       for (i in 1:length(values)) {
         is_circle_interesecting <- vector()
@@ -33,12 +34,12 @@ generate_circles <- function(val, attempts) {
   }
 }
 
-create_layout <- function(circle_radius, seq_attempts) {
+create_layout <- function() {
 
 values <<- vector("list")
 values[[1]] <<- single_circle(1)
 
-mapply(FUN = generate_circles, circle_radius, seq_attempts)
+generate_circles()
 dat <- as.data.frame(do.call(rbind, values))
 
 circlecolors <- c("#d4e09b", "#f6f4d2", "#cbdfbd", "#f19c79", "#a44a3f")
@@ -47,15 +48,18 @@ dat$fillcolor <- sample(circlecolors, size = nrow(dat), replace = T)
 return(dat)
 }
 
-dat <- create_layout(c(12:1), seq(10,4000,length.out = 12))
+dat <- create_layout()
 
 ggplot(dat)+
-  geom_circle(aes(x0= x, y0 =y, r =r, fill = fillcolor),color = NA)+
+  geom_circle(aes(x0= x, y0 =y, r =r, fill = fillcolor),size = 0.02)+
   theme_void()+
   theme(
     plot.background = element_rect(fill = "gray95", color = NA),
     panel.background = element_rect(fill = "gray95", color = NA)
   )+
-  scale_fill_identity()
+  scale_fill_identity()+
+  xlim(c(-50,250))+
+  ylim(c(-50,250))
 
-ggsave("plot.png", width = 12, height =12, dpi = 500)
+ggsave("plot_small.png", width = 12, height =12, dpi = 500)
+
