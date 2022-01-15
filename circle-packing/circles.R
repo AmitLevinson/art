@@ -14,10 +14,10 @@ single_circle <- function (radius) {
 }
 
 generate_circles <- function() {
-  for (i in 1:20000){
+  for (i in 1:25000){
       # b <- ifelse(val < 7, runif(1), runif(1, min = 5, max = val))
       b <- runif(1, min = 0.1, max = 0.5)
-      new_circle <- single_circle(runif(1, min = 1, max = 24))
+      new_circle <- single_circle(runif(1, min = 1, max = 18))
       
       for (i in 1:length(values)) {
         is_circle_interesecting <- vector()
@@ -42,7 +42,7 @@ values[[1]] <<- single_circle(1)
 generate_circles()
 dat <- as.data.frame(do.call(rbind, values))
 
-circlecolors <- c("#d4e09b", "#f6f4d2", "#cbdfbd", "#f19c79", "#a44a3f")
+circlecolors <- c("#e63946", "#f1faee", "#a8dadc", "#457b9d", "#1d3557")
 dat$fillcolor <- sample(circlecolors, size = nrow(dat), replace = T)
 
 return(dat)
@@ -57,9 +57,7 @@ ggplot(dat)+
     plot.background = element_rect(fill = "gray95", color = NA),
     panel.background = element_rect(fill = "gray95", color = NA)
   )+
-  scale_fill_identity()+
-  xlim(c(-50,250))+
-  ylim(c(-50,250))
+  scale_fill_identity()
 
-ggsave("plot_small.png", width = 12, height =12, dpi = 500)
+ggsave("odd_colors2.png", width = 12, height =12, dpi = 500)
 
